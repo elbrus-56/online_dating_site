@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
+    'rest_framework',
+    'drf_yasg',
 ]
 
-INSTALLED_APPS += ["register_user", "match_users", "list_visitors"]
+INSTALLED_APPS += ['register_user', 'match_users', 'list_users']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'register_user.User'
 # LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = "/api/clients/login"
+LOGOUT_REDIRECT_URL = '/api/clients/login'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -132,5 +133,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SENDER = "Dating Site Notifier <notify@site.ru>"
+SENDER = 'Dating Site Notifier <notify@site.ru>'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
