@@ -103,7 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'register_user.User'
-LOGIN_REDIRECT_URL = '/'
+# LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = "/api/clients/login"
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -125,8 +127,10 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SENDER = "Dating Site Notifier <notify@site.ru>"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
