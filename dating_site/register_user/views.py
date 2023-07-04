@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from register_user.serializers import CreateUserSerializer
-from register_user.services.create_watermark import Watermark
+from register_user.services.watermark import Watermark
 from config.settings import MEDIA_ROOT
 
 
@@ -15,7 +15,7 @@ class RegisterUser(CreateAPIView):
     """
     serializer_class = CreateUserSerializer
     permission_classes = (AllowAny,)
-    parser_classes = (JSONParser, FormParser, MultiPartParser)
+    parser_classes = (FormParser, MultiPartParser)
 
     def post(self, request, *args, **kwargs):
 
