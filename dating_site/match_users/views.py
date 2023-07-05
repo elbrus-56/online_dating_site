@@ -30,7 +30,7 @@ class MatchUsers(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, pk: int, *args, **kwargs) -> Response:
-        user = User.objects.get(email=request.user)
+        user = request.user
         participant = User.objects.get(pk=pk)
 
         check_like_from_participant = Matches.objects.filter(like_to_user=user.pk, user=pk)

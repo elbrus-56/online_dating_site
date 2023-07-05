@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from register_user.serializers import CreateUserSerializer, LoginSerializer
 from register_user.services.watermark import Watermark
 from config.settings import MEDIA_ROOT
+import random
 
 
 class RegisterUser(CreateAPIView):
@@ -32,8 +33,6 @@ class RegisterUser(CreateAPIView):
                     Watermark.create_watermark(user.photo, MEDIA_ROOT / str(user.photo))
                 except Exception as e:
                     print(f"RegisterUser: Не удалось нанести водяной знак на фото {user.photo} - {e}")
-
-            # login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
