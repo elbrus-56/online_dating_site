@@ -14,7 +14,7 @@ class Notify:
                 subject (str): тема письма
                 message (str): сообщение для отправки
                 attachments (tuple): вложения
-                emails (list): список получателей
+                emails (list): email получателей
 
             Returns:
                 int: 1 if True else 0

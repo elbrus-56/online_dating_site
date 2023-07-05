@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
+    'django_filters',
 ]
 
 INSTALLED_APPS += ['register_user', 'match_users', 'list_users']
