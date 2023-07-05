@@ -33,7 +33,7 @@ class RegisterUser(CreateAPIView):
                 except Exception as e:
                     print(f"RegisterUser: Не удалось нанести водяной знак на фото {user.photo} - {e}")
 
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            # login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

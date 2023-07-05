@@ -19,8 +19,8 @@ class MyFilter(FilterSet):
             result = []
 
             # Находим текущего пользователя и получаем его координаты
-            user = queryset.get(email=self.request.user).coordinate
-            start = user.longitude, user.latitude
+            user = self.request.user
+            start = user.coordinate.longitude, user.coordinate.latitude
 
             # Исключаем текущего пользователя
             result.append(user.id)

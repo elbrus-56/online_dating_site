@@ -1,4 +1,3 @@
-from rest_framework import request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.generics import ListAPIView
 from django.contrib.auth import get_user_model
