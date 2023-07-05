@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from list_users.models import Coordinate
+
+
+@admin.register(Coordinate)
+class UserAdmin(admin.ModelAdmin):
+    pass
