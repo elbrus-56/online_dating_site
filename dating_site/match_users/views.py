@@ -24,7 +24,7 @@ class MatchUsers(APIView):
     permission_classes = (IsAuthenticated,)
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
-    def get(self, request, pk: int = 1) -> Response:
+    def get(self, request, pk: int) -> Response:
         obj = get_object_or_404(User, pk=pk)
         serializer = ParticipantSerializer(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
