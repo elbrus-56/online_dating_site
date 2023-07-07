@@ -24,14 +24,16 @@ class MatchUsers(APIView):
     permission_classes = (IsAuthenticated,)
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
-    def get(self, request, pk: int) -> Response:
-        obj = get_object_or_404(User, pk=pk)
-        serializer = ParticipantSerializer(obj)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, pk: int = None) -> Response:
+        if self.kwargs.get('pk'):
+            obj = get_object_or_404(User, pk=pk)
+            serializer = ParticipantSerializer(obj)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, pk: int, *args, **kwargs) -> Response:
+    def post(self, request, pk: int = None, *args, **kwargs) -> Response:
+
         user = request.user
-        participant = User.objects.get(pk=pk)
+        participant = get_object_or_404(User, pk=pk)
 
         check_like_from_participant = Matches.objects.filter(like_to_user=user.pk, user=pk)
 
@@ -57,4 +59,3 @@ class MatchUsers(APIView):
                               )
             return Response({'like': f'Вы понравились {participant.first_name} ! Почта участника: {participant.email}'},
                             status=status.HTTP_200_OK)
-
