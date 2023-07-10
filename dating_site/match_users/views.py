@@ -25,6 +25,7 @@ class MatchUsers(APIView):
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
     def get(self, request, pk: int = None) -> Response:
+
         if self.kwargs.get('pk'):
             obj = get_object_or_404(User, pk=pk)
             serializer = ParticipantSerializer(obj)
@@ -46,16 +47,21 @@ class MatchUsers(APIView):
 
             Matches.objects.create(like_to_user=pk, user=user)
 
-            Notify.send_email(subject='Уведомление с сайта Dating Site',
-                              message=f'Вы понравились {user.first_name} {user.last_name}!'
-                                      f' Почта участника: {user.email}',
-                              emails=[participant.email]
-                              )
+            messages = [{'subject': 'Уведомление с сайта Dating Site',
+                         'message': f'Вы понравились {user.first_name} {user.last_name}!'
+                                    f' Почта участника: {user.email}',
+                         'emails': participant.email},
+                        {'subject': 'Уведомление с сайта Dating Site',
+                         'message': f'Вы понравились {participant.first_name} {participant.last_name}!'
+                                    f' Почта участника: {participant.email}',
+                         'emails': user.email}
+                        ]
 
-            Notify.send_email(subject='Уведомление с сайта Dating Site',
-                              message=f'Вы понравились {participant.first_name} {participant.last_name}!'
-                                      f' Почта участника: {participant.email}',
-                              emails=[user.email]
-                              )
+            for message in messages:
+                Notify.send_email(subject=message['subject'],
+                                  message=message['message'],
+                                  emails=[message['emails']]
+                                  )
+
             return Response({'like': f'Вы понравились {participant.first_name} ! Почта участника: {participant.email}'},
                             status=status.HTTP_200_OK)

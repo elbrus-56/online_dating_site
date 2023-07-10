@@ -5,6 +5,8 @@ from django.test import TestCase
 # from unittest import TestCase
 import django
 
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -12,6 +14,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from list_users.serializers import ListUsersSerializer
 from match_users.models import Matches
+from list_users.models import Coordinate
 
 User = get_user_model()
 
@@ -20,6 +23,7 @@ class MatchUsersTest(TestCase):
 
     def setUp(self):
         self.password = make_password('Pass1220')
+        coordinate = Coordinate.objects.create(longitude='55.19236', latitude='61.297148')
 
         self.user_1 = User.objects.create(first_name='Иван',
                                           last_name='Иванов',
@@ -60,6 +64,8 @@ class MatchUsers2Test(TestCase):
     def setUp(self):
         self.password = make_password('Pass1220')
 
+        coordinate = Coordinate.objects.create(longitude='55.19236', latitude='61.297148')
+
         self.user_1 = User.objects.create(first_name='Иван',
                                           last_name='Иванов',
                                           email='test1@test.test',
@@ -82,4 +88,5 @@ class MatchUsers2Test(TestCase):
 
     def test_match_user_API_status_code_POST(self):
         r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True}, **self.headers)
+        print(r.data)
         self.assertEqual(200, r.status_code)

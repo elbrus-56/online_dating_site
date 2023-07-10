@@ -22,6 +22,12 @@ class RegisterUser(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
+        content = {
+            'user': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
+        }
+        print(content)
+
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
