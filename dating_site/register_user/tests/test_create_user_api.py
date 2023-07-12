@@ -1,16 +1,18 @@
+import django
 import os
 
 from django.core.files.base import ContentFile
-from django.test import TestCase
-# from unittest import TestCase
-import django
+from rest_framework.test import APITestCase, APIClient
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
+from register_user.models import User
 
-class CreateOrdersViewTest(TestCase):
+
+class CreateOrdersViewTest(APITestCase):
     def setUp(self):
+        self.client = APIClient()
         self.data = {}
         with open('register_user/tests/data/1478026379.jpg', mode='rb') as fp:
             document = ContentFile(fp.read(), '1478026379.jpg')
@@ -27,5 +29,6 @@ class CreateOrdersViewTest(TestCase):
             path='/api/clients/create/',
             data=self.data
         )
-        print(r.data)
+        user = User.objects.all()
         self.assertEqual(201, r.status_code)
+        self.assertEqual(1, len(user))

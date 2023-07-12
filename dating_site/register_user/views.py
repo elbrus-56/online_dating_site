@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from register_user.serializers import CreateUserSerializer, LoginSerializer
 from register_user.services.watermark import Watermark
 from config.settings import MEDIA_ROOT
-import random
 
 
 class RegisterUser(CreateAPIView):
@@ -21,12 +20,6 @@ class RegisterUser(CreateAPIView):
     parser_classes = (FormParser, MultiPartParser)
 
     def post(self, request, *args, **kwargs):
-
-        content = {
-            'user': str(request.user),  # `django.contrib.auth.User` instance.
-            'auth': str(request.auth),  # None
-        }
-        print(content)
 
         serializer = self.serializer_class(data=request.data)
 
