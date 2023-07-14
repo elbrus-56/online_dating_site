@@ -1,11 +1,4 @@
-import os
-import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
-
 from django.contrib.auth import get_user_model
-from list_users.serializers import ListUsersSerializer
 from match_users.models import Matches
 from list_users.models import Coordinate
 from rest_framework.test import APIClient, APITestCase
@@ -38,33 +31,42 @@ class MatchUsersTest(APITestCase):
         self.client = APIClient()
         self.client.force_authenticate(self.user_2)
 
+    def tearDown(self) -> None:
+        self.client.logout()
+
     def test_match_user_API_status_code_with_GET(self):
         r = self.client.get(f'/api/clients/{self.user_1.pk}/match')
         self.assertEqual(200, r.status_code)
 
     def test_match_user_API_data_with_GET(self):
         r = self.client.get(f'/api/clients/{self.user_1.pk}/match')
-        equal = User.objects.get(id=self.user_1.pk)
-        serializer = ListUsersSerializer(equal)
-        self.assertEqual(serializer.data, r.data)
+        expected_data = {'first_name': 'Иван',
+                         'last_name': 'Иванов',
+                         'sex': 'мужской',
+                         'photo': 'http://testserver/media/images/default.png'}
+        self.assertEqual(expected_data, r.data)
 
-    def test_match_user_API_with_POST_from_user_2(self):
+    def test_match_user_API_with_POST_from_user_2_twice(self):
         r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Ваша симпатия доставлена другому участнику'}, r.data)
 
-    def tearDown(self) -> None:
-        self.client.logout()
+        r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True})
+        self.assertEqual(200, r.status_code)
+        self.assertEqual({'like': 'Вы уже ставили лайк этому участнику'}, r.data)
 
     def setUp(self):
-        Matches.objects.create(like_to_user=self.user_1.pk, user=self.user_2)
         self.client = APIClient()
         self.client.force_authenticate(self.user_1)
 
     def test_match_user_API_with_POST_from_user_1(self):
+        self.like_from_participant = Matches.objects.create(like_to_user=self.user_1.pk, user=self.user_2)
         r = self.client.post(f'/api/clients/{self.user_2.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Вы понравились Алена ! Почта участника: test2@test.test'}, r.data)
 
-    def tearDown(self) -> None:
-        self.client.logout()
+    def test_match_user_API_with_POST_from_user_1_twise(self):
+        self.like_from_user = Matches.objects.create(like_to_user=self.user_2.pk, user=self.user_1)
+        r = self.client.post(f'/api/clients/{self.user_2.pk}/match', {'like': True})
+        self.assertEqual(200, r.status_code)
+        self.assertEqual({'like': 'Вы уже ставили лайк этому участнику'}, r.data)

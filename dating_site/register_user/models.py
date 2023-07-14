@@ -18,7 +18,7 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='images/%Y-%m-%d/', default='images/default.png',
                               max_length=200, verbose_name='Фото')
     username = models.CharField(max_length=150, blank=True)
-    coordinate = models.ForeignKey(Coordinate, on_delete=models.PROTECT, null=True, blank=True,
+    coordinate = models.ForeignKey(Coordinate, on_delete=models.SET_NULL, null=True, blank=True,
                                    related_name='coordinates')
 
     class Meta:
