@@ -108,8 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'register_user.User'
-# LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/api/clients/login'
+LOGIN_REDIRECT_URL = '/api/clients/create/'
+LOGOUT_REDIRECT_URL = '/api/clients/auth/login'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

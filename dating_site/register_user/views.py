@@ -37,26 +37,3 @@ class RegisterUser(CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class LoginUser(APIView):
-    """
-    Эндпоинт для аутентикации пользователя
-    """
-    serializer_class = LoginSerializer
-    permission_classes = (AllowAny,)
-    parser_classes = (JSONParser, FormParser, MultiPartParser)
-
-    def post(self, request, *args, **kwargs):
-
-        try:
-            user = authenticate(request,
-                                email=request.data['email'],
-                                password=request.data['password']
-                                )
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-
-        except:
-            return Response({'login': 'Ошибка аутентификации'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response({'login': 'Аутентификация прошла успешно'}, status=status.HTTP_200_OK)
