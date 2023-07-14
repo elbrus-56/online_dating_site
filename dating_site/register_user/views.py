@@ -1,13 +1,10 @@
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
-from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer, BrowsableAPIRenderer, AdminRenderer
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
-from rest_framework.views import APIView
 
-from register_user.serializers import CreateUserSerializer, LoginSerializer
+from register_user.serializers import CreateUserSerializer
 from register_user.services.watermark import Watermark
 from config.settings import MEDIA_ROOT
 
