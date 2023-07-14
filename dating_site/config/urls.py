@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
+from rest_framework.authtoken.views import obtain_auth_token
+
 from .yasg import schema_view
 from django.conf.urls.static import static
 
@@ -11,6 +13,7 @@ urlpatterns = [
     path('api/clients/', include('register_user.urls')),
     path('api/clients/', include('match_users.urls')),
     path('api/', include('list_users.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
 
 
