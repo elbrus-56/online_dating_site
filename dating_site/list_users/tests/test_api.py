@@ -9,9 +9,10 @@ class ListUsersTest(APITestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         self.url = reverse('list_users')
-        self.coordinate_1 = Coordinate.objects.create(longitude='55.188910', latitude='61.332720') #Члб
-        self.coordinate_2 = Coordinate.objects.create(longitude='55.182517', latitude='61.292831') #Члб 2
-        self.coordinate_3 = Coordinate.objects.create(longitude='55.710801', latitude='37.607318') #Мск
+
+        self.coordinate_1 = Coordinate.objects.create(longitude='55.188910', latitude='61.332720')  # Члб
+        self.coordinate_2 = Coordinate.objects.create(longitude='55.182517', latitude='61.292831')  # Члб 2
+        self.coordinate_3 = Coordinate.objects.create(longitude='55.710801', latitude='37.607318')  # Мск
 
         self.user = User.objects.create_user(first_name='Иван',
                                              last_name='Иванов',
@@ -19,24 +20,27 @@ class ListUsersTest(APITestCase):
                                              sex='мужской',
                                              password='Pass1220',
                                              username='test1',
-                                             coordinate=self.coordinate_1
                                              )
+        self.user.coordinate.add(self.coordinate_1)
+
         self.user2 = User.objects.create_user(first_name='Марина',
                                               last_name='Петрова',
                                               email='test2@test.test',
                                               sex='женский',
                                               password='Pass1220',
                                               username='test2',
-                                              coordinate=self.coordinate_2
                                               )
+        self.user2.coordinate.add(self.coordinate_2)
+
         self.user3 = User.objects.create_user(first_name='Елена',
                                               last_name='Петрова',
                                               email='test3@test.test',
                                               sex='женский',
                                               password='Pass1220',
                                               username='test3',
-                                              coordinate=self.coordinate_3
                                               )
+        self.user3.coordinate.add(self.coordinate_3)
+
         self.client.force_authenticate(self.user)
 
     def test_list_users_api(self):

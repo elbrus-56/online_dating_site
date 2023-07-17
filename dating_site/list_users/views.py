@@ -10,6 +10,9 @@ User = get_user_model()
 
 
 class ListUsers(ListAPIView):
+    """
+    Эндпоинт для вывода списка участников с возможностью фильтрации
+    """
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = (IsAuthenticated,)
     queryset = User.objects.exclude(username='admin')

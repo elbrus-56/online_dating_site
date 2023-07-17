@@ -18,26 +18,24 @@ class MyFilter(FilterSet):
         if value:
             result = []
 
-            # Находим текущего пользователя и получаем его координаты
             user = self.request.user
-            start = user.coordinate.longitude, user.coordinate.latitude
+            user_coordinate = user.coordinate.last()
+            start_point = user_coordinate.longitude, user_coordinate.latitude
 
-            # Исключаем текущего пользователя
-            result.append(user.id)
+            result.append(user.pk)
 
-            # Получаем список оставшихся участников
-            participants = queryset.exclude(id=user.id)
+            participants = queryset.exclude(pk=user.pk)
 
             for participant in participants:
-                end = participant.coordinate.longitude, participant.coordinate.latitude
+                participant_coordinate = participant.coordinate.last()
+                end_point = participant_coordinate.longitude, participant_coordinate.latitude
 
-                # Считаем расстояние между пользователем и участником
-                distance = Distance().count_distance(start, end)
+                distance = Distance().count_distance(start_point, end_point)
 
                 if distance >= value:
-                    result.append(participant.id)
+                    result.append(participant.pk)
 
-            return queryset.exclude(id__in=result)
+            return queryset.exclude(pk__in=result)
 
         return queryset
 

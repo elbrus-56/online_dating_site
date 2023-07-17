@@ -2,8 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from list_users.models import Coordinate
-
 
 class User(AbstractUser):
     SEX = [
@@ -18,8 +16,6 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='images/%Y-%m-%d/', default='images/default.png',
                               max_length=200, verbose_name='Фото')
     username = models.CharField(max_length=150, blank=True)
-    coordinate = models.ForeignKey(Coordinate, on_delete=models.SET_NULL, null=True, blank=True,
-                                   related_name='coordinates')
 
     class Meta:
         db_table = 'dating_site_user'
