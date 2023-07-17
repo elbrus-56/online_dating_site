@@ -13,6 +13,7 @@ class ListUsersTest(APITestCase):
         self.coordinate_1 = Coordinate.objects.create(longitude='55.188910', latitude='61.332720')  # Члб
         self.coordinate_2 = Coordinate.objects.create(longitude='55.182517', latitude='61.292831')  # Члб 2
         self.coordinate_3 = Coordinate.objects.create(longitude='55.710801', latitude='37.607318')  # Мск
+        self.coordinate_4 = Coordinate.objects.create(longitude='55.710901', latitude='37.107318')  # Мск 2
 
         self.user = User.objects.create_user(first_name='Иван',
                                              last_name='Иванов',
@@ -41,6 +42,15 @@ class ListUsersTest(APITestCase):
                                               )
         self.user3.coordinate.add(self.coordinate_3)
 
+        self.user4 = User.objects.create_user(first_name='Игорь',
+                                              last_name='Иванов',
+                                              email='test4@test.test',
+                                              sex='мужской',
+                                              password='Pass1220',
+                                              username='test4',
+                                              )
+        self.user4.coordinate.add(self.coordinate_4)
+
         self.client.force_authenticate(self.user)
 
     def test_list_users_api(self):
@@ -51,7 +61,7 @@ class ListUsersTest(APITestCase):
 
     def test_filter_by_sex(self):
         r = self.client.get(self.url, data={'sex': 'мужской'})
-        self.assertEqual(1, len(r.data))
+        self.assertEqual(2, len(r.data))
 
         r = self.client.get(self.url, data={'sex': 'женский'})
         self.assertEqual(2, len(r.data))
@@ -69,7 +79,11 @@ class ListUsersTest(APITestCase):
         self.assertEqual(1, len(r.data))
 
         r = self.client.get(self.url, data={'distance': 5000})
-        self.assertEqual(2, len(r.data))
+        self.assertEqual(3, len(r.data))
 
         r = self.client.get(self.url, data={'distance': 1})
         self.assertEqual(0, len(r.data))
+
+    def test_some_filters(self):
+        r = self.client.get(self.url, data={'sex': 'женский', 'distance': 500})
+        print(r.data)

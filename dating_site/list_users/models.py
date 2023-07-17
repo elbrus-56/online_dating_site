@@ -16,4 +16,4 @@ class Coordinate(models.Model):
         verbose_name_plural = 'Местоположение пользователей'
 
     def __str__(self):
-        return f'ID: {self.pk} : ({self.longitude}, {self.latitude})'
+        return f'ID: {self.pk} : ({self.longitude}, {self.latitude}) : User: {self.user}'

@@ -2,6 +2,7 @@ from django_filters.rest_framework import FilterSet
 from django_filters import NumberFilter
 from django.contrib.auth import get_user_model
 
+from list_users.models import Coordinate
 from list_users.services.count_distance import Distance
 
 User = get_user_model()
@@ -19,16 +20,23 @@ class MyFilter(FilterSet):
             result = []
 
             user = self.request.user
-            user_coordinate = user.coordinate.last()
-            start_point = user_coordinate.longitude, user_coordinate.latitude
+
+            try:
+                user_coordinate = user.coordinate.last()
+                start_point = user_coordinate.longitude, user_coordinate.latitude
+            except Exception as e:
+                print(f'Координата пользователя {user} не определена')
 
             result.append(user.pk)
 
             participants = queryset.exclude(pk=user.pk)
 
             for participant in participants:
-                participant_coordinate = participant.coordinate.last()
-                end_point = participant_coordinate.longitude, participant_coordinate.latitude
+                try:
+                    participant_coordinate = participant.coordinate.last()
+                    end_point = participant_coordinate.longitude, participant_coordinate.latitude
+                except Exception:
+                    print(f'Координата участника {participant} не определена')
 
                 distance = Distance().count_distance(start_point, end_point)
 
