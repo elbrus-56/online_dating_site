@@ -1,8 +1,8 @@
 from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
 from list_users.models import Coordinate
 from register_user.models import User
+from rest_framework import status
+from rest_framework.test import APIClient, APITestCase
 
 
 class ListUsersTest(APITestCase):

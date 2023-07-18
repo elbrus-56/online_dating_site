@@ -1,5 +1,5 @@
-from PIL import Image
 from config.settings import MEDIA_ROOT
+from PIL import Image
 
 
 class Watermark:

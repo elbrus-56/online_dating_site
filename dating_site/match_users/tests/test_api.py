@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from match_users.models import Matches
 from list_users.models import Coordinate
+from match_users.models import Matches
 from rest_framework.test import APIClient, APITestCase
 
 User = get_user_model()
@@ -54,6 +54,27 @@ class MatchUsersTest(APITestCase):
         r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Вы уже ставили лайк этому участнику'}, r.data)
+
+class MatchUsersTwoTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.coordinate = Coordinate.objects.create(longitude='55.19236', latitude='61.297148')
+
+        cls.user_1 = User.objects.create_user(first_name='Иван',
+                                              last_name='Иванов',
+                                              email='test1@test.test',
+                                              sex='мужской',
+                                              password='Pass1220',
+                                              username='test1'
+                                              )
+
+        cls.user_2 = User.objects.create_user(first_name='Алена',
+                                              last_name='Иванова',
+                                              email='test2@test.test',
+                                              sex='женский',
+                                              password='Pass1220',
+                                              username='test2'
+                                              )
 
     def setUp(self):
         self.client = APIClient()

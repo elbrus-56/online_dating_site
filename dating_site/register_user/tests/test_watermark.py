@@ -1,12 +1,11 @@
 import os
-from django.test import SimpleTestCase
-import django
 
+import django
+from django.test import SimpleTestCase
+from register_user.services.watermark import Watermark
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 django.setup()
-
-from register_user.services.watermark import Watermark
 
 
 class WatermarkTest(SimpleTestCase):
@@ -20,7 +19,3 @@ class WatermarkTest(SimpleTestCase):
         Функция создает копию изображения с водяным знаком.
         """
         Watermark().create_watermark(self.img, self.output)
-
-
-
-

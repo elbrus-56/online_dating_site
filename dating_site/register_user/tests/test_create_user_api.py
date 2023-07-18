@@ -1,13 +1,6 @@
-import django
-import os
-
 from django.core.files.base import ContentFile
-from rest_framework.test import APITestCase, APIClient
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
-
 from register_user.models import User
+from rest_framework.test import APIClient, APITestCase
 
 
 class CreateOrdersViewTest(APITestCase):

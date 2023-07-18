@@ -1,0 +1,22 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "python.formatting.provider": "autopep8",
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.enabled": true,
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true,
+    "python.linting.mypyCategorySeverity.error": "Error",
+    "autopep8.args": [
+        "--in-place",
+        "--aggressive"
+    ],
+    "python.terminal.activateEnvironment": true,
+    "isort.check": false,
+    "python.linting.flake8Args": [
+        "--ignore=E402,F841,F401,E302,E305",
+        "--max-line-length=120"
+    ]
+}

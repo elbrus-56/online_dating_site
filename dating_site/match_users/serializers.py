@@ -1,8 +1,6 @@
-from rest_framework import serializers
-
 from django.contrib.auth import get_user_model
-
 from match_users.models import Matches
+from rest_framework import serializers
 
 User = get_user_model()
 

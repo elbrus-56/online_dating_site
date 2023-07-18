@@ -1,7 +1,6 @@
-from django_filters.rest_framework import FilterSet
-from django_filters import NumberFilter
 from django.contrib.auth import get_user_model
-
+from django_filters import NumberFilter
+from django_filters.rest_framework import FilterSet
 from list_users.models import Coordinate
 from list_users.services.count_distance import Distance
 

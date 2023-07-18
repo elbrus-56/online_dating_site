@@ -1,12 +1,11 @@
-import django
 import os
 
+import django
+from list_users.serializers import ListUsersSerializer
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase, APIClient
-
-from list_users.serializers import ListUsersSerializer
+from rest_framework.test import APIClient, APITestCase
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()

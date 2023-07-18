@@ -13,8 +13,11 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     sex = models.TextField(choices=SEX, verbose_name='Пол', blank=True)
-    photo = models.ImageField(upload_to='images/%Y-%m-%d/', default='images/default.png',
-                              max_length=200, verbose_name='Фото')
+    photo = models.ImageField(
+        upload_to='images/%Y-%m-%d/',
+        default='images/default.png',
+        max_length=200,
+        verbose_name='Фото')
     username = models.CharField(max_length=150, blank=True)
 
     class Meta:

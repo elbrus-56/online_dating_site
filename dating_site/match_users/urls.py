@@ -1,5 +1,4 @@
 from django.urls import path
-
 from match_users.views import MatchUsers
 
 urlpatterns = [

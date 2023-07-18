@@ -1,6 +1,5 @@
 from django.core.files.base import ContentFile
 from django_filters.compat import TestCase
-
 from register_user.serializers import CreateUserSerializer, LoginSerializer
 
 
@@ -34,7 +33,7 @@ class TestSerializers(TestCase):
         serializer = LoginSerializer(data=self.payload)
         serializer.is_valid(raise_exception=True)
         expected_data = {
-                         "email": "ivan_ivanov@test.test",
-                         "password": "1220Qwer",
-                         }
+            "email": "ivan_ivanov@test.test",
+            "password": "1220Qwer",
+        }
         self.assertEqual(expected_data, serializer.validated_data)

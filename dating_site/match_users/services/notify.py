@@ -1,12 +1,16 @@
-from django.core.mail import EmailMessage
-
 from config.settings import SENDER
+from django.core.mail import EmailMessage
 
 
 class Notify:
 
     @classmethod
-    def send_email(cls, subject: str = None, message: str = None, attachments: tuple = None, emails: list = None) -> None:
+    def send_email(cls,
+                   subject: str = '',
+                   message: str = '',
+                   attachments: tuple = None,
+                   emails: list = None
+                   ) -> int:
         """
             Функция отправляет уведомления на электронную почту
 
@@ -32,7 +36,7 @@ class Notify:
             try:
                 with open(content, "rb") as file:
                     content = file.read()
-            except Exception:
+            except FileNotFoundError:
                 print(f"Файл {content} не найден")
             email.attach(filename, content, mimetype)
 

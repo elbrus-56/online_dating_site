@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -11,7 +11,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'sex', 'password', 'photo')
+        fields = ('first_name',
+                  'last_name',
+                  'email',
+                  'sex',
+                  'password',
+                  'photo')
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
@@ -22,4 +27,5 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password')
+        fields = ('email',
+                  'password')

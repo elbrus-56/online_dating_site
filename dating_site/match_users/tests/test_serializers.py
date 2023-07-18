@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django_filters.compat import TestCase
-from match_users.serializers import ParticipantSerializer, MatchesSerializer
+from match_users.serializers import MatchesSerializer, ParticipantSerializer
 
 User = get_user_model()
 

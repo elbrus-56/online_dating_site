@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from match_users.models import Matches
 
 
