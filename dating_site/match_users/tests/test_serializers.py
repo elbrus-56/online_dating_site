@@ -24,7 +24,7 @@ class TestSerializers(TestCase):
                                               username='test2'
                                               )
 
-    def test_ParticipantSerializer(self):
+    def test_participant_serializer(self):
         serializer = ParticipantSerializer([self.user_1, self.user_2], many=True)
         expected_data = [{'first_name': 'Иван',
                           'last_name': 'Иванов',
@@ -41,7 +41,7 @@ class TestSerializers(TestCase):
                          ]
         self.assertEqual(expected_data, serializer.data)
 
-    def test_MatchesSerializer(self):
+    def test_matches_serializer(self):
         like = {'like': True, 'sdsds': 'qwqw'}
         serializer = MatchesSerializer(data=like)
         serializer.is_valid(raise_exception=True)

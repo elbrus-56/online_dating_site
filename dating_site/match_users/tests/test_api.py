@@ -34,11 +34,11 @@ class MatchUsersTest(APITestCase):
     def tearDown(self) -> None:
         self.client.logout()
 
-    def test_match_user_API_status_code_with_GET(self):
+    def test_match_user_api_status_code_with_get_request(self):
         r = self.client.get(f'/api/clients/{self.user_1.pk}/match')
         self.assertEqual(200, r.status_code)
 
-    def test_match_user_API_data_with_GET(self):
+    def test_match_user_api_data_with_get_request(self):
         r = self.client.get(f'/api/clients/{self.user_1.pk}/match')
         expected_data = {'first_name': 'Иван',
                          'last_name': 'Иванов',
@@ -46,7 +46,7 @@ class MatchUsersTest(APITestCase):
                          'photo': 'http://testserver/media/images/default.png'}
         self.assertEqual(expected_data, r.data)
 
-    def test_match_user_API_with_POST_from_user_2_twice(self):
+    def test_match_user_api_with_post_from_user_2_twice(self):
         r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Ваша симпатия доставлена другому участнику'}, r.data)
@@ -54,6 +54,7 @@ class MatchUsersTest(APITestCase):
         r = self.client.post(f'/api/clients/{self.user_1.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Вы уже ставили лайк этому участнику'}, r.data)
+
 
 class MatchUsersTwoTest(APITestCase):
     @classmethod
@@ -80,13 +81,13 @@ class MatchUsersTwoTest(APITestCase):
         self.client = APIClient()
         self.client.force_authenticate(self.user_1)
 
-    def test_match_user_API_with_POST_from_user_1(self):
+    def test_match_user_api_with_post_from_user_1(self):
         self.like_from_participant = Matches.objects.create(like_to_user=self.user_1.pk, user=self.user_2)
         r = self.client.post(f'/api/clients/{self.user_2.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)
         self.assertEqual({'like': 'Вы понравились Алена ! Почта участника: test2@test.test'}, r.data)
 
-    def test_match_user_API_with_POST_from_user_1_twise(self):
+    def test_match_user_api_with_post_from_user_1_twise(self):
         self.like_from_user = Matches.objects.create(like_to_user=self.user_2.pk, user=self.user_1)
         r = self.client.post(f'/api/clients/{self.user_2.pk}/match', {'like': True})
         self.assertEqual(200, r.status_code)

@@ -17,7 +17,7 @@ class TestSerializers(TestCase):
                         "asas": 12212121,
                         "photo": self.document}
 
-    def test_CreateUserSerializer(self):
+    def test_create_user_serializer(self):
         serializer = CreateUserSerializer(data=self.payload)
         serializer.is_valid(raise_exception=True)
         expected_data = {"first_name": "Иван",
@@ -29,7 +29,7 @@ class TestSerializers(TestCase):
 
         self.assertEqual(expected_data, serializer.validated_data)
 
-    def test_LoginSerializer(self):
+    def test_login_serializer(self):
         serializer = LoginSerializer(data=self.payload)
         serializer.is_valid(raise_exception=True)
         expected_data = {

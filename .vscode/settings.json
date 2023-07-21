@@ -16,7 +16,7 @@
     "python.terminal.activateEnvironment": true,
     "isort.check": false,
     "python.linting.flake8Args": [
-        "--ignore=E402,F841,F401,E302,E305",
+        "--ignore=D203",
         "--max-line-length=120"
     ]
 }

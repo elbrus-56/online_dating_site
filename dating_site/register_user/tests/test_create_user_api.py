@@ -17,7 +17,7 @@ class CreateOrdersViewTest(APITestCase):
         self.data['password'] = '1220Qwer',
         self.data['photo'] = document
 
-    def test_register_user_API(self):
+    def test_register_user_api(self):
         r = self.client.post(
             path='/api/clients/create/',
             data=self.data

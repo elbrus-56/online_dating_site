@@ -29,20 +29,30 @@ class MatchUsers(RetrieveAPIView):
 
     def post(self, request, pk: int = 1) -> Response:
 
-        user = request.user
-        participant = get_object_or_404(User, pk=pk)
+        current_user = request.user
+        target_user = get_object_or_404(User, pk=pk)
 
-        check_like_from_participant = Matches.objects.filter(
-            like_to_user=user.pk, user=pk).exists()
-        check_like_from_user = Matches.objects.filter(
-            like_to_user=pk, user=user).exists()
+        check_like_from_target_user = Matches.objects.filter(
+            like_to_user=current_user.pk,
+            user=pk
+        ).exists()
 
-        if not check_like_from_participant:
+        check_like_from_current_user = Matches.objects.filter(
+            like_to_user=pk,
+            user=current_user
+        ).exists()
 
-            if not check_like_from_user:
-                Matches.objects.create(like_to_user=pk, user=user)
-                return Response({'like': 'Ваша симпатия доставлена другому участнику'},
-                                status=status.HTTP_200_OK)
+        if not check_like_from_target_user:
+
+            if not check_like_from_current_user:
+                try:
+                    Matches.objects.create(like_to_user=pk, user=current_user)
+                except Exception:
+                    return Response({'like': 'Не удалось поставить like другому участнику'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'like': 'Ваша симпатия доставлена другому участнику'},
+                                    status=status.HTTP_200_OK)
 
             else:
                 return Response({'like': 'Вы уже ставили лайк этому участнику'},
@@ -50,30 +60,34 @@ class MatchUsers(RetrieveAPIView):
 
         else:
 
-            if not check_like_from_user:
+            if not check_like_from_current_user:
 
-                Matches.objects.create(like_to_user=pk, user=user)
+                try:
+                    Matches.objects.create(like_to_user=pk, user=current_user)
+                except Exception:
+                    return Response({'like': 'Не удалось поставить like другому участнику'},
+                                    status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    messages = [{'subject': 'Уведомление с сайта Dating Site',
+                                 'message': f'Вы понравились {current_user.first_name} '
+                                 f'{current_user.last_name}! Почта участника: {current_user.email}',
+                                 'emails': target_user.email
+                                 },
+                                {'subject': 'Уведомление с сайта Dating Site',
+                                 'message': f'Вы понравились {target_user.first_name} '
+                                 f'{target_user.last_name}! Почта участника: {target_user.email}',
+                                 'emails': current_user.email
+                                 }]
 
-                messages = [{'subject': 'Уведомление с сайта Dating Site',
-                             'message': f'Вы понравились {user.first_name} '
-                             f'{user.last_name}! Почта участника: {user.email}',
-                             'emails': participant.email
-                             },
-                            {'subject': 'Уведомление с сайта Dating Site',
-                             'message': f'Вы понравились {participant.first_name} '
-                             f'{participant.last_name}! Почта участника: {participant.email}',
-                             'emails': user.email
-                             }]
+                    for message in messages:
+                        Notify.send_email(subject=message['subject'],
+                                          message=message['message'],
+                                          emails=[message['emails']]
+                                          )
 
-                for message in messages:
-                    Notify.send_email(subject=message['subject'],
-                                      message=message['message'],
-                                      emails=[message['emails']]
-                                      )
-
-                return Response({'like': f'Вы понравились {participant.first_name} ! '
-                                 f'Почта участника: {participant.email}'},
-                                status=status.HTTP_200_OK)
+                    return Response({'like': f'Вы понравились {target_user.first_name} ! '
+                                     f'Почта участника: {target_user.email}'},
+                                    status=status.HTTP_200_OK)
 
             else:
                 return Response({'like': 'Вы уже ставили лайк этому участнику'},

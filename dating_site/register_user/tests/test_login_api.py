@@ -1,16 +1,8 @@
-import os
-
-import django
-from list_users.serializers import ListUsersSerializer
+from register_user.models import User
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient, APITestCase
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
-
-from register_user.models import User
 
 
 class LoginTest(APITestCase):
@@ -40,9 +32,3 @@ class LoginTest(APITestCase):
 
         r = self.client.get(reverse('list_users'))
         self.assertEqual(status.HTTP_200_OK, r.status_code)
-        #
-        # serializer = ListUsersSerializer(self.user)
-        # print(serializer.data)
-        # print(r.data)
-        #
-        # self.assertEqual(serializer.data, r.data)

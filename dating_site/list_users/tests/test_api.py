@@ -86,4 +86,9 @@ class ListUsersTest(APITestCase):
 
     def test_some_filters(self):
         r = self.client.get(self.url, data={'sex': 'женский', 'distance': 500})
-        print(r.data)
+        self.assertEqual(1, len(r.data))
+
+    def test_filter_by_distance_with_wrong_data(self):
+        r = self.client.get(self.url, data={'distance': 'qq'})
+        self.assertEqual("{'distance': [ErrorDetail(string='Введите число.', code='invalid')]}",
+                         str(r.data))

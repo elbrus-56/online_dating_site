@@ -24,7 +24,7 @@ class TestSerializers(TestCase):
                                               username='test2'
                                               )
 
-    def test_ListUsersSerializer(self):
+    def test_list_users_serializer(self):
         serializer = ListUsersSerializer([self.user_1, self.user_2], many=True)
         expected_data = [{'first_name': 'Иван',
                           'last_name': 'Иванов',
