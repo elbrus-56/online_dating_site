@@ -17,33 +17,33 @@ class MyFilter(FilterSet):
         """
 
         if value:
-            result = []
+            excluded_users = []
 
-            user = self.request.user
+            current_user = self.request.user
 
             try:
-                user_coordinate = user.coordinate.last()
-                start_point = user_coordinate.longitude, user_coordinate.latitude
+                current_user_coordinate = current_user.coordinate.last()
+                start_point = current_user_coordinate.longitude, current_user_coordinate.latitude
             except Exception:
-                print(f'Координата пользователя {user} не определена')
+                print(f'Координата пользователя {current_user} не определена')
 
-            result.append(user.pk)
+            excluded_users.append(current_user.pk)
 
-            participants = queryset.exclude(pk=user.pk)
+            target_users = queryset.exclude(pk=current_user.pk)
 
-            for participant in participants:
+            for target_user in target_users:
                 try:
-                    participant_coordinate = participant.coordinate.last()
-                    end_point = participant_coordinate.longitude, participant_coordinate.latitude
+                    target_user_coordinate = target_user.coordinate.last()
+                    end_point = target_user_coordinate.longitude, target_user_coordinate.latitude
                 except Exception:
-                    print(f'Координата участника {participant} не определена')
+                    print(f'Координата участника {target_user} не определена')
 
                 distance = Distance().count_distance(start_point, end_point)
 
                 if distance >= value:
-                    result.append(participant.pk)
+                    excluded_users.append(target_user.pk)
 
-            return queryset.exclude(pk__in=result)
+            return queryset.exclude(pk__in=excluded_users)
 
         return queryset
 

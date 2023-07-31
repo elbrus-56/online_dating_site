@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/clients/', include('register_user.urls')),
     path('api/clients/', include('match_users.urls')),
     path('api/', include('list_users.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 

@@ -24,7 +24,10 @@ SECRET_KEY = 'django-insecure-@l40)^ic67(4=ke0ds!j%znf4os#r6oi&adm)uv00awcba-#he
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:5000"]
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:5000']
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'django_filters',
+    "debug_toolbar",
 ]
 
 INSTALLED_APPS += ['register_user', 'match_users', 'list_users']
@@ -49,6 +53,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
