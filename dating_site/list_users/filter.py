@@ -20,33 +20,40 @@ class MyFilter(FilterSet):
             excluded_users = []
 
             current_user = self.request.user
+            start_point = self._get_user_coordinate(current_user)
 
-            try:
-                current_user_coordinate = current_user.coordinate.last()
-                start_point = current_user_coordinate.longitude, current_user_coordinate.latitude
-            except Exception:
-                print(f'Координата пользователя {current_user} не определена')
+            if start_point:
 
-            excluded_users.append(current_user.pk)
+                excluded_users.append(current_user.pk)
 
-            target_users = queryset.exclude(pk=current_user.pk)
+                target_users = queryset.exclude(pk=current_user.pk)
 
-            for target_user in target_users:
-                try:
-                    target_user_coordinate = target_user.coordinate.last()
-                    end_point = target_user_coordinate.longitude, target_user_coordinate.latitude
-                except Exception:
-                    print(f'Координата участника {target_user} не определена')
+                for target_user in target_users:
 
-                distance = Distance().count_distance(start_point, end_point)
+                    end_point = self._get_user_coordinate(target_user)
 
-                if distance >= value:
-                    excluded_users.append(target_user.pk)
+                    distance = Distance().count_distance(start_point, end_point)
 
-            return queryset.exclude(pk__in=excluded_users)
+                    if distance >= value:
+                        excluded_users.append(target_user.pk)
+
+                return queryset.exclude(pk__in=excluded_users)
 
         return queryset
 
     class Meta:
         model = User
         fields = ['sex', 'first_name', 'last_name', 'distance']
+
+    def _get_user_coordinate(self, user):
+        """
+        Функция возвращает координаты пользователя
+        """
+        user_coordinate = user.coordinate.last()
+
+        if user_coordinate:
+            start_point = user_coordinate.longitude, user_coordinate.latitude
+            return start_point
+        else:
+            print(f'Координата пользователя {user} не определена')
+            return None
