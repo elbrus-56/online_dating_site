@@ -17,11 +17,29 @@ class CreateOrdersViewTest(APITestCase):
         self.data['password'] = '1220Qwer',
         self.data['photo'] = document
 
-    def test_register_user_api(self):
+        self.data_2 = {}
+        self.data_2['first_name'] = 'Sergey',
+        self.data_2['last_name'] = 'Иванов',
+        self.data_2['email'] = 'sergey_ivanov@test.test',
+        self.data_2['sex'] = 'мужской',
+        self.data_2['password'] = '1220Qwer',
+
+    def test_register_user_api_with_image(self):
         r = self.client.post(
             path='/api/clients/create/',
             data=self.data
         )
-        user = User.objects.all()
+        user = User.objects.filter(email='ivan_ivanov@test.test').exists()
+
         self.assertEqual(201, r.status_code)
-        self.assertEqual(1, len(user))
+        self.assertTrue(user)
+
+    def test_register_user_api_without_image(self):
+        r = self.client.post(
+            path='/api/clients/create/',
+            data=self.data_2
+        )
+        user = User.objects.filter(email='sergey_ivanov@test.test').exists()
+
+        self.assertEqual(201, r.status_code)
+        self.assertTrue(user)

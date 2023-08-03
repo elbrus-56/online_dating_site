@@ -1,4 +1,7 @@
+from typing import List, Union
+
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
 from django_filters import NumberFilter
 from django_filters.rest_framework import FilterSet
 from list_users.services.count_distance import Distance
@@ -20,6 +23,7 @@ class MyFilter(FilterSet):
             excluded_users = []
 
             current_user = self.request.user
+
             start_point = self._get_user_coordinate(current_user)
 
             if start_point:
@@ -32,10 +36,12 @@ class MyFilter(FilterSet):
 
                     end_point = self._get_user_coordinate(target_user)
 
-                    distance = Distance().count_distance(start_point, end_point)
+                    if end_point:
 
-                    if distance >= value:
-                        excluded_users.append(target_user.pk)
+                        distance = Distance().count_distance(start_point, end_point)
+
+                        if distance >= value:
+                            excluded_users.append(target_user.pk)
 
                 return queryset.exclude(pk__in=excluded_users)
 
@@ -45,7 +51,7 @@ class MyFilter(FilterSet):
         model = User
         fields = ['sex', 'first_name', 'last_name', 'distance']
 
-    def _get_user_coordinate(self, user):
+    def _get_user_coordinate(self, user: QuerySet[User]) -> Union[tuple, None]:
         """
         Функция возвращает координаты пользователя
         """

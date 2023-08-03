@@ -1,4 +1,3 @@
-from config.settings import MEDIA_ROOT
 from django.contrib.auth import authenticate, login
 from register_user.serializers import CreateUserSerializer, LoginSerializer
 from register_user.services.watermark import Watermark
@@ -11,9 +10,9 @@ from rest_framework.views import APIView
 
 
 class RegisterUser(CreateAPIView):
-    """
+    '''
     Эндпоинт для регистрации нового пользователя
-    """
+    '''
 
     serializer_class = CreateUserSerializer
     permission_classes = (AllowAny,)
@@ -27,14 +26,16 @@ class RegisterUser(CreateAPIView):
 
             user = serializer.save()
 
-            if "default" not in str(user.photo):
+            if 'default' not in str(user.photo.name):
+
                 try:
                     Watermark.create_watermark(
-                        user.photo, MEDIA_ROOT / str(user.photo))
+                        user.photo.path, user.photo.path)
+
                 except FileNotFoundError:
                     print(
-                        f"RegisterUser: Не удалось нанести водяной знак на \
-                        фото {user.photo}")
+                        f'RegisterUser: Не удалось нанести водяной знак на \
+                        фото {user.photo.name}')
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -42,9 +43,9 @@ class RegisterUser(CreateAPIView):
 
 
 class LoginUser(APIView):
-    """
+    '''
     Эндпоинт для аутентикации пользователя
-    """
+    '''
 
     serializer_class = LoginSerializer
     permission_classes = (AllowAny,)
